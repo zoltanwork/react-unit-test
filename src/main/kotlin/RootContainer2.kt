@@ -1,24 +1,25 @@
+import RootStyles2.Table
 import kotlinx.browser.document
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
+import kotlinx.css.*
+import kotlinx.html.classes
+import kotlinx.html.id
+import kotlinx.html.js.onClickFunction
 import org.w3c.dom.*
 import react.*
-import react.dom.html.ReactHTML.button
-import react.dom.html.ReactHTML.div
-import react.dom.html.ReactHTML.table
-import react.dom.html.ReactHTML.tbody
-import react.dom.html.ReactHTML.td
-import react.dom.html.ReactHTML.tr
+import react.dom.attrs
+import styled.*
 
-external interface RootContainerProps: PropsWithChildren {
+external interface RootContainer2Props: PropsWithChildren {
   var restClient: RestClient
 }
 
-val RootContainer = fc<RootContainerProps>("RootContainer") { props  ->
+val RootContainer2 = fc<RootContainer2Props>("RootContainer") { props  ->
   var response by useState<List<ResponseDto>>()
   val container = useRef<Element>(null)
   val chartDiv = useRef<HTMLDivElement>(null)
-  val flag by useState(true)
+  var flag by useState(true)
 
   println("root container")
   useEffect(listOf<String>()) {
@@ -28,44 +29,47 @@ val RootContainer = fc<RootContainerProps>("RootContainer") { props  ->
       println("after response ----------------------------------------------------------------")
     }
   }
-  div {
-    div {
+  styledDiv {
+    styledDiv {
       ref = chartDiv
       attrs.id = "chart"
     }
-    button {
-//      attrs.onClickFunction = { flag = !flag }
+    styledButton {
+      attrs.onClickFunction = { flag = !flag }
       +"BUTTON"
     }
   }
-  div {
+  styledDiv {
     ref = container
     +"Hello world!"
     println("=== list size = ${response?.size}")
-    table {
+    styledTable {
       attrs.id = "table"
-      attrs.className = "tableClass"
-      tbody {
+      attrs.classes = setOf("tableClass")
+//      css { +Table } // IF I UNCOMMENT THIS LINE, THE TEST ClientTest FAILS
+      styledTbody {
         response?.forEachIndexed { idx, item ->
-          tr {
+          styledTr {
             attrs.id = "tr$idx"
-            attrs.className = "trClass"
-            td {
+            attrs.classes = setOf("trClass")
+            styledTd {
               attrs.id = "td${idx}userId"
-              div {
-                attrs.id = "div${idx}userId"
+              styledDiv {
+                attrs {
+                  attributes["id"] = "div${idx}userId"
+                }
                 +item.userId.toString()
               }
             }
-            td {
+            styledTd {
               attrs.id = "td${idx}id"
               +item.id.toString()
             }
-            td {
+            styledTd {
               attrs.id = "td${idx}title"
               +item.title
             }
-            td {
+            styledTd {
               attrs.id = "td${idx}body"
               +item.body
               +" "
@@ -91,10 +95,20 @@ val RootContainer = fc<RootContainerProps>("RootContainer") { props  ->
           console.log("#div0userId", dd)
         }
       }
+//      println(" container first child=${it.children.asDynamic()[0].children[0]}")
+//      println(" .tableClass=${it.querySelector(".tableClass")}")
     }
   }
 }
 
-fun RBuilder.rootContainer(restClient: RestClient) = RootContainer.invoke {
+fun RBuilder.rootContainer2(restClient: RestClient) = RootContainer2.invoke {
   attrs.restClient = restClient
+}
+
+object RootStyles2 : StyleSheet("CursorInfoPanel", isStatic = true) {
+  val Table by css {
+    width = 100.pct
+    fontSize = 14.px
+    tableLayout = TableLayout.fixed
+  }
 }

@@ -1,9 +1,16 @@
 @file:Suppress("HardCodedStringLiteral")
 
-val reactSuffix = "-pre.243-kotlin-1.5.30"
+val reactSuffix = "-pre.256-kotlin-1.5.31"
 val kotlinReact = "17.0.2$reactSuffix"
-val ktorVersion = "1.6.3"
-val kotlinxSerializationVersion = "1.2.2"
+val ktorVersion = "1.6.4"
+val kotlinxSerializationVersion = "1.3.0"
+
+//val chartsKtMavenRepoUser: String? by project
+//val chartsKtMavenRepoPassword: String? by project
+//
+//val d2vVersion = "0.8.15"
+//val chartsKtVersion = "1.0.7-RC2"
+
 
 plugins {
     kotlin("js") version "1.5.30"
@@ -15,6 +22,17 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+//    maven { setUrl("https://maven.pkg.jetbrains.space/data2viz/p/maven/public") }
+//    maven {
+//        url = uri("https://maven.pkg.jetbrains.space/data2viz/p/charts-1-r/maven")
+//        authentication {
+//            create<BasicAuthentication>("basic")
+//        }
+//        credentials {
+//            username = chartsKtMavenRepoUser ?: System.getenv("chartsKtMavenRepoUser")
+//            password = chartsKtMavenRepoPassword ?: System.getenv("chartsKtMavenRepoPassword")
+//        }
+//    }
 }
 
 dependencies {
@@ -30,7 +48,10 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:$ktorVersion")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
 
-    testImplementation(kotlin("test"))
+//    implementation ("io.data2viz.d2v:viz:$d2vVersion")
+//    implementation ("io.data2viz.charts:core:$chartsKtVersion")
+
+    testImplementation(kotlin("test-js"))
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
 }
 
